@@ -1,13 +1,17 @@
 import React from "react";
 
 import "bootstrap/js/dist/dropdown";
+import "../Styles/style.css";
 
 import "bootstrap/js/dist/collapse";
 
 function Nav({ Toggle }) {
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-transparent">
-      <i className="navbar-brand bi bi-justify-left fs-4" onClick={Toggle}></i>
+      <i
+        className="navbar-brand bi bi-justify-left fs-4 pointer"
+        onClick={Toggle}
+      ></i>
       <button
         className="navbar-toggler d-lg-none"
         type="button"
@@ -30,17 +34,14 @@ function Nav({ Toggle }) {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              Yousof
+              Metriklass
             </a>
             <div className="dropdown-menu" aria-labelledby="dropdownId">
               <a className="dropdown-item" href="#">
-                Profile
+                Perfil
               </a>
               <a className="dropdown-item" href="#">
-                Setting
-              </a>
-              <a className="dropdown-item" href="#">
-                Logout
+                Cerrar sesión
               </a>
             </div>
           </li>
