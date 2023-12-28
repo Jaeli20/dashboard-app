@@ -1,7 +1,7 @@
 import React from "react";
 
 import Dashboard from "./components/Pages/Dasboard/Dahsboard";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom"; 
 function App() {
   const router = createBrowserRouter([
     {
