@@ -6,12 +6,24 @@ import {
   GridDeleteIcon,
   gridClasses,
 } from "@mui/x-data-grid";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useContext } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import UserActions from "../Pages/Dasboard/User/UserActions";
+import AppContext from "../../Utils/AppContext/AppContext";
 export default function UserDataGrid({ data }) {
   const [rowId, setRowId] = useState(null);
+  const { dispatch } = useContext(AppContext);
 
+  const handleOpenModal = (rowData) => {
+    dispatch({
+      type: "TOGGLE_DELETEUSERMODALVISIBILITY",
+      payload: true,
+    });
+    dispatch({
+      type: "SET_DELETEUSERDATA",
+      payload: rowData,
+    });
+  };
   const columns = useMemo(
     () => [
       {
@@ -45,7 +57,7 @@ export default function UserDataGrid({ data }) {
           <GridActionsCellItem
             icon={<GridDeleteIcon />}
             label="Eliminar"
-            onClick={() => console.log(params.row.name)}
+            onClick={() => handleOpenModal(params.row)}
           />,
           <GridActionsCellItem
             icon={<VisibilityIcon />}

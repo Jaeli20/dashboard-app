@@ -12,6 +12,8 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import SideList from "./SideList";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
+import AppContext from "../../../Utils/AppContext/AppContext";
+import Cookies from "js-cookie";
 
 const drawerWidth = 240;
 
@@ -33,25 +35,32 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
-
 export default function Dashboard() {
+  const { state, dispatch } = React.useContext(AppContext);
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const [dark, setDark] = React.useState(true);
+
   const darkTheme = React.useMemo(
     () =>
       createTheme({
         palette: {
-          mode: dark ? "dark" : "light",
+          mode: state.darkMode ? "dark" : "light",
         },
       }),
-    [dark]
+    [state.darkMode]
   );
 
+  const handleChangeTheme = () => {
+    Cookies.set("themeState", state.darkMode);
+    const a = Cookies.get("themeState");
+    console.log(a);
+    dispatch({
+      type: "SET_DARKMODE",
+      payload: !state.darkMode,
+    });
+  };
   return (
     <ThemeProvider theme={darkTheme}>
       <Box sx={{ display: "flex" }}>
@@ -88,8 +97,8 @@ export default function Dashboard() {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <IconButton color="inherit" onClick={() => setDark(!dark)}>
-              {dark ? <Brightness7Icon /> : <Brightness4Icon />}
+            <IconButton color="inherit" onClick={handleChangeTheme}>
+              {state.darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
           </Toolbar>
         </AppBar>

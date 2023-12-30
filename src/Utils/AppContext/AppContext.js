@@ -5,13 +5,21 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const initialState = {
     TransitionsModalVisibility: false,
+    DeleteUserModalVisibility: false,
+    DeleteUserData: {},
+    darkMode: true,
   };
 
   const appReducer = (state, action) => {
     switch (action.type) {
       case "TOGGLE_TRANSITIONMODALVISIBILITY":
         return { ...state, TransitionsModalVisibility: action.payload };
-
+      case "TOGGLE_DELETEUSERMODALVISIBILITY":
+        return { ...state, DeleteUserModalVisibility: action.payload };
+      case "SET_DELETEUSERDATA":
+        return { ...state, DeleteUserData: action.payload };
+      case "SET_DARKMODE":
+        return { ...state, darkMode: action.payload };
       default:
         return state;
     }

@@ -16,9 +16,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useState, useContext } from "react";
 import AppContext from "../../Utils/AppContext/AppContext";
 import UserController from "../../Utils/Controllers/UserController";
-
+import Validation from "../../Utils/Validations/Validation";
 const Modalpopup = () => {
   const userController = new UserController();
+  const validations = new Validation();
   const { dispatch, state } = useContext(AppContext);
 
   const [newUserData, setNewUserData] = useState({
@@ -38,12 +39,6 @@ const Modalpopup = () => {
     console.log(newUserData);
   };
 
-  const functionopenpopup = () => {
-    dispatch({
-      type: "TOGGLE_TRANSITIONMODALVISIBILITY",
-      payload: true,
-    });
-  };
   const closepopup = () => {
     dispatch({
       type: "TOGGLE_TRANSITIONMODALVISIBILITY",
@@ -52,8 +47,13 @@ const Modalpopup = () => {
   };
 
   const handleCreateUser = async () => {
-    // await userController.createUser()
     console.log(newUserData);
+    if (validations.validateNotNullData(newUserData)) {
+      await userController.createUser(newUserData);
+      alert("Usuario Creado");
+    } else {
+      alert("Todos los campos son obligatorios");
+    }
   };
 
   const roles = [
@@ -116,7 +116,6 @@ const Modalpopup = () => {
               helperText="Escoge el rol para el nuevo usuario"
               name="role"
               onChange={handleInputChange}
-              value={newUserData.role}
             >
               {roles.map((option) => (
                 <option key={option.value} value={option.value}>

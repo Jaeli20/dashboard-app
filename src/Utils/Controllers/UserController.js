@@ -25,4 +25,32 @@ export default class UserController {
       throw error;
     }
   }
+
+  async DeleteUserByID(userID, successCallback) {
+    try {
+      const respuesta = await fetch(BASE_URL + `user/delete/${userID}`, {
+        method: "DELETE",
+      });
+      if (!respuesta.ok) {
+        throw Error(`Algo salió mal! ${respuesta.status}`);
+      }
+      successCallback();
+    } catch (error) {
+      throw new Error("Error en DeleteUserByID:", error);
+    }
+  }
+
+  async getProjectImIn(userID) {
+    try {
+      const response = await fetch(BASE_URL + `projects/in/${userID}`);
+      if (!response.ok) {
+        alert("Error en la petición");
+      }
+      const project = await response.json();
+      return project;
+    } catch (error) {
+      console.error("Error :", error);
+      throw error;
+    }
+  }
 }

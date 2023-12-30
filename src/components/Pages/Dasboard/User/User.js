@@ -4,6 +4,7 @@ import React, { useEffect, useState, lazy, Suspense, useContext } from "react";
 import AppContext from "../../../../Utils/AppContext/AppContext";
 import TransitionsModal from "../../../Modals/TransitionModal";
 import Modalpopup from "../../../Modals/CreaterNewUserModal";
+import DeleteUserModal from "../../../Modals/DeleteUserModal";
 const UserDataGridLazy = lazy(() => import("../../../Particles/UserDataGrid"));
 
 export default function User({ setSelectedLink, link }) {
@@ -50,6 +51,7 @@ export default function User({ setSelectedLink, link }) {
       </Suspense>
 
       <Modalpopup />
+      <DeleteUserModal />
     </Box>
   );
 }
