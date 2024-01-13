@@ -8,6 +8,8 @@ export const AppProvider = ({ children }) => {
     DeleteUserModalVisibility: false,
     DeleteUserData: {},
     darkMode: true,
+    userData: {},
+    globalInfo: {},
   };
 
   const appReducer = (state, action) => {
@@ -20,6 +22,10 @@ export const AppProvider = ({ children }) => {
         return { ...state, DeleteUserData: action.payload };
       case "SET_DARKMODE":
         return { ...state, darkMode: action.payload };
+      case "SET_USERDATA":
+        return { ...state, userData: action.payload };
+      case "SET_GLOBALINFO":
+        return { ...state, globalInfo: action.payload };
       default:
         return state;
     }

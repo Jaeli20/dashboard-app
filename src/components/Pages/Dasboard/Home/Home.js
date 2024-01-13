@@ -1,24 +1,29 @@
 import { Box, Paper, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import NewProjectsTable from "../../../Particles/NewProjectsTable";
+import AppContext from "../../../../Utils/AppContext/AppContext";
+import { useContext } from "react";
 export default function Home({ setSelectedLink, link }) {
+  const [globalInfo, setGlobalInfo] = React.useState();
+  const { state } = useContext(AppContext);
   useEffect(() => {
     setSelectedLink(link);
   }, []);
-  const paperItems = [
+
+  const paperItems = React.useMemo(() => [
     {
       title: "Total de proyectos",
-      data: 100,
+      data: state.globalInfo.total,
     },
     {
       title: "Proyectos activos",
-      data: 100,
+      data: state.globalInfo.activeTotal,
     },
     {
       title: "Proyectos cerrados",
-      data: 100,
+      data: state.globalInfo.closeTotal,
     },
-  ];
+  ]);
   return (
     <>
       <Box

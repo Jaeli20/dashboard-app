@@ -17,7 +17,7 @@ export default function User({ setSelectedLink, link }) {
   }, []);
 
   const GetUserData = async () => {
-    await fetch("https://metriklass-api-dev-fgtq.4.us-1.fl0.io/user/test")
+    await fetch("http://localhost:3001/user/test")
       .then((data) => data.json())
       .then((dataJson) => setData(dataJson));
   };

@@ -4,31 +4,32 @@ import Cookies from "js-cookie";
 import Dashboard from "./components/Pages/Dasboard/Dahsboard";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AppContext from "./Utils/AppContext/AppContext";
+import Login from "./components/Pages/Login/Login";
 function App() {
   const { state, dispatch } = React.useContext(AppContext);
 
   useEffect(() => {
-    const storageState = Cookies.get("themeState");
-
-    if (storageState) {
-      dispatch({
-        type: "SET_DARKMODE",
-        payload: storageState,
-      });
-    }
-
-    Cookies.set("themeState", true);
+    fetch("http://localhost:3001/project/info")
+      .then((data) => data.json())
+      .then((dataJson) =>
+        dispatch({ type: "SET_GLOBALINFO", payload: dataJson })
+      );
   }, []);
 
   const router = createBrowserRouter([
-    {
+        {
       path: "/",
+      element: <Login />,
+    },
+    {
+      path: "/inicio",
       element: <Dashboard />,
     },
     {
-      path: "*",
+      path: "/inicio/*",
       element: <Dashboard />,
     },
+
   ]);
   return <RouterProvider router={router} />;
 }

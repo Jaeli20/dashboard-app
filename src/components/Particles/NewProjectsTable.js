@@ -27,7 +27,7 @@ export default function NewProjectsTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   React.useEffect(() => {
-    fetch("https://metriklass-api-dev-fgtq.4.us-1.fl0.io/test")
+    fetch("http://localhost:3001/test")
       .then((res) => res.json())
       .then((resjson) => {
         // Mapear y establecer los primeros 5 elementos
@@ -41,6 +41,7 @@ export default function NewProjectsTable() {
         });
         setData(mappedData);
       });
+   
   }, []);
 
   function createData(projectName, owner, progress, missionData) {
