@@ -1,6 +1,6 @@
 import { Box, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
-import UserWidget from "../Wigets/UserWidget";
+import UserWidget from "../Wigets/UserWidget/UserWidget";
 import { useParams } from "react-router-dom";
 
 const UserProfileModal = () => {

@@ -13,6 +13,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import UserController from "../../../Utils/Controllers/UserController";
 import Cookies from "js-cookie";
+import AppContext from "../../../Utils/AppContext/AppContext";
 const defaultTheme = createTheme();
 
 export default function Login() {
@@ -22,7 +23,7 @@ export default function Login() {
     setChecked(event.target.checked);
   };
   const navigate = useNavigate();
-
+  const { dispatch } = React.useContext(AppContext);
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -41,10 +42,26 @@ export default function Login() {
       Cookies.set("user_name", data.profile.name);
       Cookies.set("user_email", data.profile.email);
       Cookies.set("user_id", data.profile._id);
+      dispatch({ type: "SET_PERMISSION", payload: data.profile.active });
       navigate("/inicio");
     }
   };
 
+  React.useEffect(() => {
+    const handleGetActiveStatus = async () => {
+      if (Cookies.get("user_id")) {
+        const { isActive } = await userController.getUserAdminStatus(
+          Cookies.get("user_id")
+        );
+
+        console.log(isActive);
+        dispatch({ type: "SET_PERMISSION", payload: isActive });
+        navigate("/inicio");
+      }
+    };
+
+    handleGetActiveStatus();
+  }, []);
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">

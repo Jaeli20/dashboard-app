@@ -7,7 +7,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
 import FeaturedPlayListIcon from "@mui/icons-material/FeaturedPlayList";
-
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import {
   Box,
   Divider,
@@ -25,6 +25,8 @@ import Home from "./Home/Home";
 import User from "./User/User";
 import Log from "./Log/Log";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import Admin from "./Admin/Admin";
 
 const drawerWidth = 240;
 
@@ -72,6 +74,12 @@ const SideList = ({ open, setOpen }) => {
         link: "usuarios",
       },
       {
+        title: "Administradores",
+        icon: <AdminPanelSettingsIcon />,
+        component: <Admin {...{ setSelectedLink, link: "admin" }} />,
+        link: "admin",
+      },
+      {
         title: "Log",
         icon: <FeaturedPlayListIcon />,
         component: <Log {...{ setSelectedLink, link: "log" }} />,
@@ -82,6 +90,13 @@ const SideList = ({ open, setOpen }) => {
   );
 
   const navigate = useNavigate();
+
+  const handleCloseSession = () => {
+    Cookies.remove("user_name");
+    Cookies.remove("user_email");
+    Cookies.remove("user_id");
+    navigate("/");
+  };
   return (
     <>
       <Drawer variant="permanent" open={open}>
@@ -128,12 +143,20 @@ const SideList = ({ open, setOpen }) => {
           ))}
         </List>
         <Divider />
+
         <Box sx={{ textAlign: "center" }}>
-          {open && <Typography>{"Usuario"}</Typography>}
-          <Typography variant="body2">{"rol"}</Typography>
-          {open && <Typography variant="body2">{"Correo"}</Typography>}
+          {open && (
+            <>
+              <Typography>{Cookies.get("user_name")}</Typography>
+              <Typography variant="body2">{"Administrador"}</Typography>
+              <Typography variant="body2">
+                {Cookies.get("user_email")}
+              </Typography>
+              <Typography variant="body2">{Cookies.get("user_id")}</Typography>
+            </>
+          )}
           <Tooltip title="Cerrar sesión" sx={{ mt: 1 }}>
-            <IconButton>
+            <IconButton onClick={handleCloseSession}>
               <LogoutIcon />
             </IconButton>
           </Tooltip>

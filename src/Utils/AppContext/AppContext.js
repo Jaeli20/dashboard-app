@@ -10,6 +10,7 @@ export const AppProvider = ({ children }) => {
     darkMode: true,
     userData: {},
     globalInfo: {},
+    hasPermission: false,
   };
 
   const appReducer = (state, action) => {
@@ -26,6 +27,9 @@ export const AppProvider = ({ children }) => {
         return { ...state, userData: action.payload };
       case "SET_GLOBALINFO":
         return { ...state, globalInfo: action.payload };
+      case "SET_PERMISSION":
+        return { ...state, hasPermission: action.payload };
+
       default:
         return state;
     }

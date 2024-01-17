@@ -96,4 +96,38 @@ export default class UserController {
       throw error;
     }
   }
+
+  async getUserAdminStatus(user_id) {
+    try {
+      const response = await fetch(BASE_URL + `admin/status/${user_id}`);
+      if (!response.ok) {
+        alert("No se pudo obtener los datos");
+      }
+      const serverRes = await response.json();
+      return serverRes;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAllUserAdmin() {
+    try {
+      const response = await fetch(BASE_URL + `admin`);
+      if (!response.ok) {
+        throw new Error("No se pudo obtener los datos");
+      }
+
+      // Verifica si la respuesta es JSON antes de intentar convertirla
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const serverRes = await response.json();
+        console.log("Contenido del arreglo:", serverRes);
+        return serverRes;
+      } else {
+        throw new Error("La respuesta no es JSON");
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 }

@@ -12,7 +12,7 @@ import { styled } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useContext } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import AppContext from "../../Utils/AppContext/AppContext";
+import AppContext from "../../../Utils/AppContext/AppContext";
 import EmailIcon from "@mui/icons-material/Email";
 import ArticleIcon from "@mui/icons-material/Article";
 const UserWidget = () => {
