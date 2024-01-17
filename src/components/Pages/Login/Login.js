@@ -49,13 +49,14 @@ export default function Login() {
 
   React.useEffect(() => {
     const handleGetActiveStatus = async () => {
+      dispatch({ type: "SET_PERMISSION", payload: false });
       if (Cookies.get("user_id")) {
         const { isActive } = await userController.getUserAdminStatus(
           Cookies.get("user_id")
         );
 
         console.log(isActive);
-        dispatch({ type: "SET_PERMISSION", payload: isActive });
+        dispatch({ type: "SET_PERMISSION", payload: false });
         navigate("/inicio");
       }
     };

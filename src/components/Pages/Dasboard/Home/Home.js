@@ -8,12 +8,6 @@ import Cookies from "js-cookie";
 export default function Home({ setSelectedLink, link }) {
   const [globalInfo, setGlobalInfo] = React.useState();
   const { state, dispatch } = useContext(AppContext);
-  useEffect(() => {
-    setSelectedLink(link);
-    if (Cookies.get("user_id")) {
-      dispatch({ type: "SET_PERMISSION", payload: true });
-    }
-  }, []);
 
   const paperItems = React.useMemo(() => [
     {

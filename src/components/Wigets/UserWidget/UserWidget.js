@@ -75,7 +75,11 @@ const UserWidget = () => {
       <Box p="1rem 0">
         <FlexBetween mb="0.5rem">
           <Typography>Fecha de creación</Typography>
-          <Typography fontWeight="500">TODO</Typography>
+          <Typography fontWeight="500">
+            {userData.created_at != undefined
+              ? userData.created_at
+              : "no definido"}
+          </Typography>
         </FlexBetween>
       </Box>
 
