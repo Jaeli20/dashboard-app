@@ -7,21 +7,26 @@ import {
   MenuItem,
   Select,
   FormControl,
+  Box,
 } from "@mui/material";
 
 import ArticleIcon from "@mui/icons-material/Article";
 import Popup from "../Popups/Popup";
 import ChangePasswordModal from "./ChangePasswordModal";
-export default function EditUserModal(props) {
+import AdminUserController from "../../Utils/Controllers/AdminUserController";
+import AppContext from "../../Utils/AppContext/AppContext";
+export default function EditUserAdminModal(props) {
+  const { dispatch } = React.useContext(AppContext);
   const userController = new UserController();
-  const { setOpenPopup, userData } = props;
+  const adminUserController = new AdminUserController();
+  const { setOpenPopup, userData, updateUserCallback } = props;
   const [age, setAge] = React.useState("");
-  const { name, email, occupation } = userData;
+  const { name, email, active, _id } = userData;
+
   const [editUserData, setEditUserData] = useState({
     name: name,
     email: email,
-    occupation: occupation,
-    role: "",
+    active: active,
   });
 
   const handleInputChange = (event) => {
@@ -32,19 +37,27 @@ export default function EditUserModal(props) {
     }));
   };
   const [openPopupP, setOpenPopupP] = React.useState(false);
-  const roles = [
-    { value: "contribuidor", label: "Contribuidor" },
-    { value: "administrador", label: "Administrador" },
-  ];
 
   const handleUpdateUser = () => {
-    userController.updateUser(userData._id, editUserData);
+    adminUserController.updateInfo(
+      _id,
+      editUserData.email,
+      editUserData.name,
+      () => updateUserCallback()
+    );
+  };
+
+  const handleUpdateUserState = () => {
+    adminUserController.updateActiveStatus(_id, !active, () => {
+      setOpenPopup(false);
+      updateUserCallback();
+    });
   };
   return (
     <>
       <FormControl fullWidth>
-        <Grid container spacing={5}>
-          <Grid item xs={6}>
+        <Box>
+          <Grid item xs={5}>
             <TextField
               name="name"
               label="Nombre"
@@ -67,17 +80,17 @@ export default function EditUserModal(props) {
               >
                 Cambiar contraseña
               </Button>
+              <Button
+                variant="contained"
+                sx={{ my: 1, mx: 1 }}
+                onClick={handleUpdateUserState}
+                color={editUserData.active ? "error" : "success"}
+              >
+                {editUserData.active
+                  ? "Deshabilitar usuario"
+                  : "Habilitar usuario"}
+              </Button>
             </div>
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              name="occupation"
-              label="Ocupación"
-              value={editUserData.occupation}
-              onChange={handleInputChange}
-              sx={{ my: 1 }}
-            />
-
             <div style={{ marginVertical: 1 }}>
               <Button
                 variant="contained"
@@ -97,7 +110,7 @@ export default function EditUserModal(props) {
               </Button>
             </div>
           </Grid>
-        </Grid>
+        </Box>
       </FormControl>
       <Popup
         setOpenPopup={setOpenPopupP}

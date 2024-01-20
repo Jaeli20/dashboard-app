@@ -73,7 +73,7 @@ export default function UserCard() {
             value={
               state.DeleteUserData.occupation
                 ? state.DeleteUserData.occupation
-                : "undefined yet"
+                : "No definido"
             }
             id="outlined"
           />

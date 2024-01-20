@@ -82,6 +82,7 @@ export default function UserDataGrid({ data }) {
             onClick={() => {
               setOpenPopup(true);
               setSelectedUser(params.row);
+              dispatch({ type: "SET_USERID", payload: params.row._id });
             }}
           />,
         ],

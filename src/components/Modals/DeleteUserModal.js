@@ -14,9 +14,11 @@ import { useContext } from "react";
 import AppContext from "../../Utils/AppContext/AppContext";
 import UserCard from "../Cards/UserCard";
 import UserController from "../../Utils/Controllers/UserController";
+import AdminUserController from "../../Utils/Controllers/AdminUserController";
 
 const DeleteUserModal = () => {
   const userController = new UserController();
+  const adminUserController = new AdminUserController();
   const { dispatch, state } = useContext(AppContext);
 
   const closepopup = () => {
@@ -30,7 +32,20 @@ const DeleteUserModal = () => {
     });
   };
   const handleDeleteUser = async () => {
-    await userController.DeleteUserByID(state.DeleteUserData._id, onSuccess);
+    if (state.DeleteUserData.active) {
+      adminUserController.deleteUserAdminByID(
+        state.DeleteUserData._id,
+        onSuccess
+      );
+
+      fetch("http://localhost:3001/admin")
+        .then((res) => res.json())
+        .then((res) =>
+          dispatch({ type: "SET_USEADMINDATA", payload: res.adminUsers })
+        );
+    } else {
+      await userController.DeleteUserByID(state.DeleteUserData._id, onSuccess);
+    }
   };
   const onSuccess = () => {
     dispatch({

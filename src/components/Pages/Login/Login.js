@@ -43,20 +43,18 @@ export default function Login() {
       Cookies.set("user_email", data.profile.email);
       Cookies.set("user_id", data.profile._id);
       dispatch({ type: "SET_PERMISSION", payload: data.profile.active });
-      navigate("/inicio");
+      //  navigate("/inicio");
     }
   };
 
   React.useEffect(() => {
     const handleGetActiveStatus = async () => {
-      dispatch({ type: "SET_PERMISSION", payload: false });
       if (Cookies.get("user_id")) {
         const { isActive } = await userController.getUserAdminStatus(
           Cookies.get("user_id")
         );
 
-        console.log(isActive);
-        dispatch({ type: "SET_PERMISSION", payload: false });
+        dispatch({ type: "SET_PERMISSION", payload: isActive });
         navigate("/inicio");
       }
     };

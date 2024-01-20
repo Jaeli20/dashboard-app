@@ -7,31 +7,30 @@ import UserAdminDataGrid from "../../../Particles/UserAdminDataGrid";
 import UserController from "../../../../Utils/Controllers/UserController";
 import Cookies from "js-cookie";
 import AppContext from "../../../../Utils/AppContext/AppContext";
+import CreateUserAdminModal from "../../../Modals/CreateUserAdminModal";
+import Popup from "../../../Popups/Popup";
 const LazyUserAdminDataGrid = lazy(() =>
   import("../../../Particles/UserAdminDataGrid")
 );
 export default function Admin({ setSelectedLink, link }) {
   const [data, setData] = React.useState([]);
   const { dispatch, state } = React.useContext(AppContext);
+  const [openCreateUserPopup, setOpenCreateUserPopup] = React.useState(false);
 
   const userController = new UserController();
+
   React.useEffect(() => {
     setSelectedLink(link);
-
-    handleGetData();
-    if (Cookies.get("user_id")) {
-      dispatch({ type: "SET_PERMISSION", payload: true });
-    }
+    updateData();
   }, []);
 
-  const handleGetData = async () => {
-    const user = await fetch("http://localhost:3001/admin");
-    const userJson = await user.json();
-
-    setData(userJson);
-    console.log(userJson.users);
+  const updateData = () => {
+    fetch("http://localhost:3001/admin")
+      .then((res) => res.json())
+      .then((res) =>
+        dispatch({ type: "SET_USEADMINDATA", payload: res.adminUsers })
+      );
   };
-
   return (
     <>
       <Protected>
@@ -48,11 +47,25 @@ export default function Admin({ setSelectedLink, link }) {
           >
             Usuarios administradores
           </Typography>
-          <Button>Agregar nuevo usuario administrador</Button>
+          <Button onClick={() => setOpenCreateUserPopup(true)}>
+            Agregar nuevo usuario administrador
+          </Button>
           <Suspense fallback={"cargando"}>
-            {data && <LazyUserAdminDataGrid data={data} key={0} />}
+            {data && <LazyUserAdminDataGrid data={data.adminUsers} key={0} />}
           </Suspense>
           <Modalpopup />
+
+          <Popup
+            setOpenPopup={setOpenCreateUserPopup}
+            openPopup={openCreateUserPopup}
+            title={"Crear usuario administrador"}
+          >
+            <CreateUserAdminModal
+              successCallback={updateData}
+              openCreateUserPopup={openCreateUserPopup}
+              setOpenCreateUserPopup={setOpenCreateUserPopup}
+            />
+          </Popup>
           <DeleteUserModal />
         </Box>
       </Protected>

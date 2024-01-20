@@ -17,8 +17,15 @@ import { useState, useContext } from "react";
 import AppContext from "../../Utils/AppContext/AppContext";
 import UserController from "../../Utils/Controllers/UserController";
 import Validation from "../../Utils/Validations/Validation";
-const Modalpopup = () => {
+import AdminUserController from "../../Utils/Controllers/AdminUserController";
+
+const CreateUserAdminModal = ({
+  openCreateUserPopup,
+  setOpenCreateUserPopup,
+  successCallback,
+}) => {
   const userController = new UserController();
+  const adminUserController = new AdminUserController();
   const validations = new Validation();
   const { dispatch, state } = useContext(AppContext);
 
@@ -26,7 +33,6 @@ const Modalpopup = () => {
     name: "",
     email: "",
     password: "",
-    occupation: "",
   });
 
   const handleInputChange = (event) => {
@@ -38,39 +44,35 @@ const Modalpopup = () => {
     console.log(newUserData);
   };
 
-  const closepopup = () => {
-    dispatch({
-      type: "TOGGLE_TRANSITIONMODALVISIBILITY",
-      payload: false,
-    });
-  };
-
   const handleCreateUser = async () => {
     console.log(newUserData);
     if (validations.validateNotNullData(newUserData)) {
-      await userController.createUser(newUserData);
+      await adminUserController.createAdminUser(newUserData, async () => {
+        await successCallback();
+        setOpenCreateUserPopup(false);
+      });
+
       alert("Usuario Creado");
     } else {
       alert("Todos los campos son obligatorios");
     }
   };
 
-  const roles = [
-    { value: "contribuidor", label: "Contribuidor" },
-    { value: "administrador", label: "Administrador" },
-  ];
   return (
     <>
       <Dialog
         // fullScreen
-        open={state.TransitionsModalVisibility}
-        onClose={closepopup}
+        open={openCreateUserPopup}
+        onClose={() => setOpenCreateUserPopup(false)}
         fullWidth
         maxWidth="sm"
       >
         <DialogTitle>
           Crear nuevo usuario
-          <IconButton onClick={closepopup} style={{ float: "right" }}>
+          <IconButton
+            onClose={() => setOpenCreateUserPopup(false)}
+            style={{ float: "right" }}
+          >
             <CloseIcon color="primary"></CloseIcon>
           </IconButton>
         </DialogTitle>
@@ -98,14 +100,6 @@ const Modalpopup = () => {
               onChange={handleInputChange}
             />
 
-            <TextField
-              variant="outlined"
-              label="Ocupación"
-              name="occupation"
-              value={newUserData.occupation}
-              onChange={handleInputChange}
-            />
-
             <Button
               color="primary"
               variant="contained"
@@ -120,4 +114,4 @@ const Modalpopup = () => {
   );
 };
 
-export default Modalpopup;
+export default CreateUserAdminModal;

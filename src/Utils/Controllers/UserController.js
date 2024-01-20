@@ -130,4 +130,26 @@ export default class UserController {
       throw error;
     }
   }
+
+  async updateUserPass(user_id, newPassword) {
+    try {
+      const response = await fetch(
+        BASE_URL + `admin/update-user-pass/${user_id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ newPassword: newPassword }),
+        }
+      );
+      if (!response.ok) {
+        alert("error actualizar contraseña");
+      } else {
+        alert("contraseña actualizada");
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 }

@@ -16,9 +16,6 @@ export default function User({ setSelectedLink, link }) {
   useEffect(() => {
     GetUserData();
     setSelectedLink(link);
-    if (Cookies.get("user_id")) {
-      dispatch({ type: "SET_PERMISSION", payload: true });
-    }
   }, []);
 
   const GetUserData = async () => {

@@ -15,9 +15,26 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import AppContext from "../../../Utils/AppContext/AppContext";
 import EmailIcon from "@mui/icons-material/Email";
 import ArticleIcon from "@mui/icons-material/Article";
+import ProjectController from "../../../Utils/Controllers/ProjectController";
 const UserWidget = () => {
+  const projectController = new ProjectController();
   const { state } = useContext(AppContext);
   const [userData, setUserData] = useState(state.userData);
+  const [projectKPIData, setProjectKPIData] = useState([]);
+  const fecha = new Date(userData.created_at);
+  const año = fecha.getFullYear();
+  const mes = (fecha.getMonth() + 1).toString().padStart(2, "0"); // Suma 1 porque los meses son indexados desde 0
+  const dia = fecha.getDate().toString().padStart(2, "0");
+  const fechaFormateada = `${dia}/${mes}/${año}`;
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await projectController.getProjectKPIFromID(userData._id);
+      console.log(res);
+      setProjectKPIData(res);
+    };
+    getData();
+  }, []);
   return (
     <>
       {/* FIRST ROW */}
@@ -50,12 +67,6 @@ const UserWidget = () => {
 
       {/* SECOND ROW */}
       <Box p="1rem 0">
-        <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
-          <KeyIcon fontSize="large" />
-          <Typography>
-            {userData.rol !== undefined ? userData.rol : "rol no definido"}
-          </Typography>
-        </Box>
         <Box display="flex" alignItems="center" gap="1rem">
           <WorkOutlineOutlined fontSize="large" />
           <Typography>
@@ -76,9 +87,7 @@ const UserWidget = () => {
         <FlexBetween mb="0.5rem">
           <Typography>Fecha de creación</Typography>
           <Typography fontWeight="500">
-            {userData.created_at != undefined
-              ? userData.created_at
-              : "no definido"}
+            {userData.created_at != undefined ? fechaFormateada : "no definido"}
           </Typography>
         </FlexBetween>
       </Box>
@@ -91,6 +100,19 @@ const UserWidget = () => {
 
         <PersonalDocList key={0} personalDocList={userData.personalDocs} />
       </Box>
+      {/* FIVE ROW */}
+      <Box p="1rem 0">
+        <Typography fontSize="1rem" fontWeight="500" mb="1rem">
+          User kpi
+        </Typography>
+
+        <UserKPIList
+          totalMissionCompleted={userData.missionCompletedCount}
+          totalProjectOwn={userData.totalProjectOwnCount}
+          projectKPIData={projectKPIData}
+          key={1}
+        />
+      </Box>
     </>
   );
 };
@@ -102,6 +124,55 @@ const FlexBetween = styled(Box)({
   justifyContent: "space-between",
   alignItems: "center",
 });
+
+const UserKPIList = ({
+  totalMissionCompleted,
+  totalProjectOwn,
+  projectKPIData,
+}) => {
+  return (
+    <>
+      <FlexBetween gap="1rem" mb="0.5rem">
+        <FlexBetween gap="1rem">
+          <Box>
+            <Typography fontWeight="500">
+              Total de misiones completadas:
+              {totalMissionCompleted !== undefined
+                ? totalMissionCompleted
+                : "no definido"}
+            </Typography>
+          </Box>
+        </FlexBetween>
+      </FlexBetween>
+
+      <FlexBetween gap="1rem" mb="0.5rem">
+        <FlexBetween gap="1rem">
+          <Box>
+            <Typography fontWeight="500">
+              Total de proyectos participando:
+              {projectKPIData.projectParticipatingCount !== undefined
+                ? projectKPIData.projectParticipatingCount
+                : "no definido"}
+            </Typography>
+          </Box>
+        </FlexBetween>
+      </FlexBetween>
+
+      <FlexBetween gap="1rem" mb="0.5rem">
+        <FlexBetween gap="1rem">
+          <Box>
+            <Typography fontWeight="500">
+              Total de proyectos administrados:
+              {projectKPIData.projectOwnCount !== undefined
+                ? projectKPIData.projectOwnCount
+                : "no definido"}
+            </Typography>
+          </Box>
+        </FlexBetween>
+      </FlexBetween>
+    </>
+  );
+};
 
 const PersonalDocList = ({ personalDocList }) => {
   const handleOpenLink = (link) => {
