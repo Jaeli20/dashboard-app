@@ -15,10 +15,12 @@ import AppContext from "../../Utils/AppContext/AppContext";
 import UserCard from "../Cards/UserCard";
 import UserController from "../../Utils/Controllers/UserController";
 import AdminUserController from "../../Utils/Controllers/AdminUserController";
+import LogController from "../../Utils/Controllers/LogController";
 
 const DeleteUserModal = () => {
   const userController = new UserController();
   const adminUserController = new AdminUserController();
+  const logController = new LogController();
   const { dispatch, state } = useContext(AppContext);
 
   const closepopup = () => {
@@ -32,19 +34,28 @@ const DeleteUserModal = () => {
     });
   };
   const handleDeleteUser = async () => {
-    if (state.DeleteUserData.active) {
+    if (state.DeleteUserData.active !== undefined) {
       adminUserController.deleteUserAdminByID(
         state.DeleteUserData._id,
-        onSuccess
+        async () => {
+          await fetch("http://localhost:3001/admin")
+            .then((res) => res.json())
+            .then((res) =>
+              dispatch({ type: "SET_USEADMINDATA", payload: res.adminUsers })
+            );
+          const response = logController.getLog();
+          dispatch({ type: "SET_LOGDATA", payload: response });
+          onSuccess();
+        }
       );
-
-      fetch("http://localhost:3001/admin")
-        .then((res) => res.json())
-        .then((res) =>
-          dispatch({ type: "SET_USEADMINDATA", payload: res.adminUsers })
-        );
     } else {
-      await userController.DeleteUserByID(state.DeleteUserData._id, onSuccess);
+      await userController.DeleteUserByID(
+        state.DeleteUserData._id,
+        async () => {
+          await updateData();
+          onSuccess();
+        }
+      );
     }
   };
   const onSuccess = () => {
@@ -52,7 +63,15 @@ const DeleteUserModal = () => {
       type: "TOGGLE_DELETEUSERMODALVISIBILITY",
       payload: false,
     });
+
     alert("Usuario eliminado");
+  };
+  const updateData = async () => {
+    await fetch("http://localhost:3001/user/test")
+      .then((data) => data.json())
+      .then((dataJson) => {
+        dispatch({ type: "SET_GLOBALUSERDATA", payload: dataJson });
+      });
   };
   return (
     <Dialog

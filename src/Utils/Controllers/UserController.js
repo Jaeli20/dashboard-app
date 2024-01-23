@@ -2,7 +2,7 @@ const BASE_URL2 = "https://metriklass-api-dev-fgtq.4.us-1.fl0.io/";
 const BASE_URL = "http://localhost:3001/";
 
 export default class UserController {
-  async createUser(data) {
+  async createUser(data, onSuccessCallback) {
     try {
       const response = await fetch(BASE_URL + "user/post", {
         method: "POST",
@@ -19,6 +19,7 @@ export default class UserController {
         return false;
       } else {
         console.log("Usuario creado");
+        onSuccessCallback();
         return true;
       }
     } catch (error) {
@@ -55,7 +56,7 @@ export default class UserController {
     }
   }
 
-  async updateUser(user_id, data) {
+  async updateUser(user_id, data, onSuccessCallback) {
     try {
       const response = await fetch(BASE_URL + `user/update/${user_id}`, {
         method: "PUT",
@@ -69,6 +70,7 @@ export default class UserController {
         alert("No se pudo actualizar el perfil");
       } else {
         alert("Actualizado");
+        onSuccessCallback();
       }
     } catch (error) {
       console.error("Error :", error);
@@ -136,7 +138,7 @@ export default class UserController {
       const response = await fetch(
         BASE_URL + `admin/update-user-pass/${user_id}`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },

@@ -14,6 +14,9 @@ export const AppProvider = ({ children }) => {
     user_id: "",
     userAdminData: [],
     singleUserAdminData: [],
+    adminUserID: "",
+    userDataObject: [],
+    logData: [],
   };
 
   const appReducer = (state, action) => {
@@ -34,12 +37,16 @@ export const AppProvider = ({ children }) => {
         return { ...state, hasPermission: action.payload };
       case "SET_USERID":
         return { ...state, user_id: action.payload };
-
       case "SET_USEADMINDATA":
         return { ...state, userAdminData: action.payload };
       case "SET_SINGLEUSEADMINDATA":
         return { ...state, singleUserAdminData: action.payload };
-
+      case "SET_ADMINUSERID":
+        return { ...state, adminUserID: action.payload };
+      case "SET_GLOBALUSERDATA":
+        return { ...state, userDataObject: action.payload };
+      case "SET_LOGDATA":
+        return { ...state, logData: action.payload };
       default:
         return state;
     }

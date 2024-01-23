@@ -37,7 +37,7 @@ const AppBar = styled(MuiAppBar, {
 
 export default function Dashboard() {
   const { state, dispatch } = React.useContext(AppContext);
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
   };

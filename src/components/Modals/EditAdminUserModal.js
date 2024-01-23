@@ -15,6 +15,7 @@ import Popup from "../Popups/Popup";
 import ChangePasswordModal from "./ChangePasswordModal";
 import AdminUserController from "../../Utils/Controllers/AdminUserController";
 import AppContext from "../../Utils/AppContext/AppContext";
+import ChangeAdminPasswordModal from "./ChangeAdminPasswordModal";
 export default function EditUserAdminModal(props) {
   const { dispatch } = React.useContext(AppContext);
   const userController = new UserController();
@@ -117,7 +118,7 @@ export default function EditUserAdminModal(props) {
         openPopup={openPopupP}
         title={`Cambiar contraseña del usuario "${name}"`}
       >
-        <ChangePasswordModal />
+        <ChangeAdminPasswordModal loca_user_id={_id} />
       </Popup>
     </>
   );

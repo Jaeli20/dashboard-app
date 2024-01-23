@@ -10,12 +10,12 @@ import Cookies from "js-cookie";
 const UserDataGridLazy = lazy(() => import("../../../Particles/UserDataGrid"));
 
 export default function User({ setSelectedLink, link }) {
-  const [data, setData] = useState();
   const { dispatch, state } = useContext(AppContext);
-
+  const [data, setData] = React.useState([]);
   useEffect(() => {
     GetUserData();
     setSelectedLink(link);
+    console.log(state.userDataObject);
   }, []);
 
   const GetUserData = async () => {
@@ -23,6 +23,7 @@ export default function User({ setSelectedLink, link }) {
       .then((data) => data.json())
       .then((dataJson) => {
         setData(dataJson);
+        dispatch({ type: "SET_GLOBALUSERDATA", payload: dataJson });
       });
   };
 

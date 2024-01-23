@@ -16,7 +16,7 @@ import EditUserModal from "../Modals/EditUserModal";
 import UserProfileModal from "../Modals/UserProfileModal";
 export default function UserDataGrid({ data }) {
   const [rowId, setRowId] = useState(null);
-  const { dispatch } = useContext(AppContext);
+  const { dispatch, state } = useContext(AppContext);
 
   const [selectedUser, setSelectedUser] = React.useState();
 
@@ -40,20 +40,10 @@ export default function UserDataGrid({ data }) {
         sortable: false,
         filterable: false,
       },
-      { field: "name", headerName: "Nombre", width: 200 /**editable: true */ },
-      { field: "email", headerName: "Email", width: 200 /**editable: true */ },
+      { field: "name", headerName: "Nombre", width: 200 },
+      { field: "email", headerName: "Email", width: 200 },
       { field: "_id", headerName: "id", width: 200 },
-      /** {
-        field: "quick_save",
-        headerName: "Cambios rápidos",
-        type: "actions",
-        width: 200,
-        sortable: false,
-        filterable: false,
-        renderCell: (params) => (
-          <UserActions {...{ params, rowId, setRowId }} />
-        ),
-      }, */
+
       {
         field: "actions",
         headerName: "Opciones",
@@ -97,7 +87,7 @@ export default function UserDataGrid({ data }) {
     <>
       <DataGrid
         columns={columns}
-        rows={data}
+        rows={state.userDataObject}
         getRowId={(row) => row._id}
         getRowSpacing={(params) => ({
           top: params.isFirstVisible ? 0 : 6,

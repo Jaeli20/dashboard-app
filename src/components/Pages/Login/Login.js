@@ -43,7 +43,7 @@ export default function Login() {
       Cookies.set("user_email", data.profile.email);
       Cookies.set("user_id", data.profile._id);
       dispatch({ type: "SET_PERMISSION", payload: data.profile.active });
-      //  navigate("/inicio");
+      navigate("/inicio");
     }
   };
 

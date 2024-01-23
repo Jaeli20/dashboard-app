@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import AppContext from "../../../../Utils/AppContext/AppContext";
 import CreateUserAdminModal from "../../../Modals/CreateUserAdminModal";
 import Popup from "../../../Popups/Popup";
+import LogController from "../../../../Utils/Controllers/LogController";
 const LazyUserAdminDataGrid = lazy(() =>
   import("../../../Particles/UserAdminDataGrid")
 );
@@ -18,6 +19,7 @@ export default function Admin({ setSelectedLink, link }) {
   const [openCreateUserPopup, setOpenCreateUserPopup] = React.useState(false);
 
   const userController = new UserController();
+  const logController = new LogController();
 
   React.useEffect(() => {
     setSelectedLink(link);
@@ -30,6 +32,9 @@ export default function Admin({ setSelectedLink, link }) {
       .then((res) =>
         dispatch({ type: "SET_USEADMINDATA", payload: res.adminUsers })
       );
+
+    const response = logController.getLog();
+    dispatch({ type: "SET_LOGDATA", payload: response });
   };
   return (
     <>

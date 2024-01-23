@@ -16,16 +16,16 @@ import AppContext from "../../Utils/AppContext/AppContext";
 import UserController from "../../Utils/Controllers/UserController";
 import AdminUserController from "../../Utils/Controllers/AdminUserController";
 
-export default function ChangePasswordModal() {
+export default function ChangeAdminPasswordModal({ loca_user_id }) {
   const { state } = React.useContext(AppContext);
   const [showPassword, setShowPassword] = React.useState(false);
   const [pass, setPass] = React.useState("");
-  const userController = new UserController();
+
   const adminUserController = new AdminUserController();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleUpdateUserPass = async () => {
-    userController.updateUserPass(state.user_id, pass);
+    adminUserController.updateAdminPassword(loca_user_id, pass);
   };
   const handleChange = (event) => {
     const text = event.target.value;

@@ -16,13 +16,14 @@ import EditUserAdminModal from "../Modals/EditAdminUserModal";
 import AppContext from "../../Utils/AppContext/AppContext";
 import CreateUserAdminModal from "../Modals/CreateUserAdminModal";
 import UserAdminProfileModal from "../Modals/UserAdminProfileModal";
+import LogController from "../../Utils/Controllers/LogController";
 
 export default function UserAdminDataGrid() {
   const [selectedUser, setSelectedUser] = React.useState();
   const [openPopup, setOpenPopup] = React.useState(false);
   const [openPopupInfo, setOpenPopupInfo] = React.useState(false);
   const { dispatch, state } = React.useContext(AppContext);
-
+  const logController = new LogController();
   const columns = [
     { field: "name", headerName: "Nombre", width: 300 /**editable: true */ },
     { field: "email", headerName: "Email", width: 300 /**editable: true */ },
@@ -65,6 +66,9 @@ export default function UserAdminDataGrid() {
       .then((res) =>
         dispatch({ type: "SET_USEADMINDATA", payload: res.adminUsers })
       );
+
+    const response = logController.getLog();
+    dispatch({ type: "SET_LOGDATA", payload: response });
   };
   const handleOpenModal = (rowData) => {
     dispatch({
@@ -75,7 +79,12 @@ export default function UserAdminDataGrid() {
       type: "SET_DELETEUSERDATA",
       payload: rowData,
     });
+    dispatch({
+      type: "SET_ADMINUSERID",
+      payload: rowData._id,
+    });
   };
+
   return (
     <>
       <DataGrid

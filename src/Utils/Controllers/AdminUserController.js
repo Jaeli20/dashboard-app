@@ -76,4 +76,26 @@ export default class AdminUserController {
       throw error;
     }
   }
+
+  async updateAdminPassword(user_id, newPassword) {
+    try {
+      const response = await fetch(
+        BASE_URL + `admin/update-admin-pass/${user_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ newPassword: newPassword }),
+        }
+      );
+      if (!response.ok) {
+        alert(`error actualizar contraseña ${user_id}`);
+      } else {
+        alert("contraseña actualizada");
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
 }

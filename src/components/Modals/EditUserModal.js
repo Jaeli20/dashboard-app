@@ -12,7 +12,9 @@ import {
 import ArticleIcon from "@mui/icons-material/Article";
 import Popup from "../Popups/Popup";
 import ChangePasswordModal from "./ChangePasswordModal";
+import AppContext from "../../Utils/AppContext/AppContext";
 export default function EditUserModal(props) {
+  const { dispatch } = React.useContext(AppContext);
   const userController = new UserController();
   const { setOpenPopup, userData } = props;
   const [age, setAge] = React.useState("");
@@ -32,13 +34,16 @@ export default function EditUserModal(props) {
     }));
   };
   const [openPopupP, setOpenPopupP] = React.useState(false);
-  const roles = [
-    { value: "contribuidor", label: "Contribuidor" },
-    { value: "administrador", label: "Administrador" },
-  ];
 
   const handleUpdateUser = () => {
-    userController.updateUser(userData._id, editUserData);
+    userController.updateUser(userData._id, editUserData, updateData);
+  };
+  const updateData = async () => {
+    await fetch("http://localhost:3001/user/test")
+      .then((data) => data.json())
+      .then((dataJson) => {
+        dispatch({ type: "SET_GLOBALUSERDATA", payload: dataJson });
+      });
   };
   return (
     <>
@@ -104,7 +109,7 @@ export default function EditUserModal(props) {
         openPopup={openPopupP}
         title={`Cambiar contraseña del usuario "${name}"`}
       >
-        <ChangePasswordModal />
+        <ChangePasswordModal isAdmin={false} />
       </Popup>
     </>
   );

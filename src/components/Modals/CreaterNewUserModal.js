@@ -48,17 +48,20 @@ const Modalpopup = () => {
   const handleCreateUser = async () => {
     console.log(newUserData);
     if (validations.validateNotNullData(newUserData)) {
-      await userController.createUser(newUserData);
+      await userController.createUser(newUserData, async () => {
+        await fetch("http://localhost:3001/user/test")
+          .then((data) => data.json())
+          .then((dataJson) => {
+            dispatch({ type: "SET_GLOBALUSERDATA", payload: dataJson });
+            closepopup();
+          });
+      });
       alert("Usuario Creado");
     } else {
       alert("Todos los campos son obligatorios");
     }
   };
 
-  const roles = [
-    { value: "contribuidor", label: "Contribuidor" },
-    { value: "administrador", label: "Administrador" },
-  ];
   return (
     <>
       <Dialog
