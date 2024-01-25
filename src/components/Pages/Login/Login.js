@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import UserController from "../../../Utils/Controllers/UserController";
 import Cookies from "js-cookie";
 import AppContext from "../../../Utils/AppContext/AppContext";
+import Logo from "../../../images/AppIcon.png";
 const defaultTheme = createTheme();
 
 export default function Login() {
@@ -73,9 +74,10 @@ export default function Login() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <Avatar
+            sx={{ m: 1, bgcolor: "secondary.main", height: 200, width: 200 }}
+            src={Logo}
+          />
           <Typography component="h1" variant="h5">
             Bienvenido
           </Typography>

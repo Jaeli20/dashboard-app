@@ -8,7 +8,9 @@ import Cookies from "js-cookie";
 export default function Home({ setSelectedLink, link }) {
   const [globalInfo, setGlobalInfo] = React.useState();
   const { state, dispatch } = useContext(AppContext);
-
+  React.useEffect(() => {
+    setSelectedLink(link);
+  }, []);
   const paperItems = React.useMemo(() => [
     {
       title: "Total de proyectos",
