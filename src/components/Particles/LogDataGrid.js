@@ -21,7 +21,7 @@ export default function LogDataGrid({ data }) {
         width: 200,
       },
       { field: "message", headerName: "Log", width: 400 },
-      { field: "origin", headerName: "Origen", width: 200 },
+      { field: "origin", headerName: "Tipo de error", width: 200 },
       {
         field: "created_at",
         headerName: "Fecha",
@@ -29,7 +29,7 @@ export default function LogDataGrid({ data }) {
         renderCell: (params) => <Box>{formatDate(params.row.created_at)}</Box>,
       },
       {
-        field: "created_at",
+        field: "time",
         headerName: "Hora",
         width: 200,
         renderCell: (params) => <Box>{formatTime(params.row.created_at)}</Box>,
